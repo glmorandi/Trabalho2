@@ -1,0 +1,28 @@
+name: Realiza o deploy em DEV
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Realiza o deploy de index.html para o Github Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        destination_branch: gh-pages-develop
+
+    - name: Realiza as migrações
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL_DEV }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_DEV }}
+      run: |
+        psql $SUPABASE_URL -f migrations/migrate.sql
