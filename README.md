@@ -182,6 +182,9 @@ Adicione os seguintes secrets no repositório do GitHub:
 | `SUPABASE_URL_DEV` | URL do banco de desenvolvimento |
 | `SUPABASE_KEY_DEV` | Senha do usuário do banco de desenvolvimento |
 | `SUPABASE_USER_DEV` | Usuário do banco de desenvolvimento |
+| `SUPABASE_URL_PRD` | URL do banco de produção |
+| `SUPABASE_KEY_PRD` | Senha do usuário do banco de produção |
+| `SUPABASE_USER_PRD` | Usuário do banco de produção |
 
 
   
