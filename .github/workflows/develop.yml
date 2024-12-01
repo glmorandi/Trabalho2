@@ -23,27 +23,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Pages
-      uses: actions/configure-pages@v5
-
-    - name: Create /dev directory
-      run: |
-        mkdir -p dev
-        mv * dev || true
-        mv .[^.]* dev || true
-
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './dev'
-
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
-      with:
-        folder: 'dev' 
+    env:
+      NETLIFY_URL: ${{ secrets.NETLIFY_URL }}
+    run: |
+      curl -X POST -d '{}' $NETLIFY_URL
 
     - name: Realiza as migrações
       env:
