@@ -87,7 +87,7 @@ Este repositório implementa um sistema de CI/CD que gerencia duas pipelines dis
 
 - Etapas:
 
-1. Publica o site no GitHub Pages (`/dev`).
+1. Publica o site no Netlify.
 
 2. Atualiza o banco de dados de desenvolvimento no Supabase.
 
@@ -182,6 +182,7 @@ Adicione os seguintes secrets no repositório do GitHub:
 | `SUPABASE_URL_DEV` | URL do banco de desenvolvimento |
 | `SUPABASE_KEY_DEV` | Senha do usuário do banco de desenvolvimento |
 | `SUPABASE_USER_DEV` | Usuário do banco de desenvolvimento |
+| `NETLIFY_URL` | URL para realizar o rebuild do site em dev |
 | `SUPABASE_URL_PRD` | URL do banco de produção |
 | `SUPABASE_KEY_PRD` | Senha do usuário do banco de produção |
 | `SUPABASE_USER_PRD` | Usuário do banco de produção |
@@ -207,7 +208,7 @@ Certifique-se de que os arquivos YAML dos workflows (`develop.yml` e `main.yml`)
 
 1. Ao fazer merge em `develop`:
 
-- O site é publicado no GitHub Pages (`/dev`).
+- O site é publicado no Netlify.
 
 - O arquivo `migrate.sql` é executado no banco de desenvolvimento.
 
