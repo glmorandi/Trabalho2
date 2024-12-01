@@ -4,24 +4,47 @@ on:
   schedule:
     - cron: '0 21 * * *'
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Realiza o deploy de index.html para o Github Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+
+    - name: Create /dev directory
+        run: |
+          mkdir -p dev
+          mv * dev || true
+          mv .[^.]* dev || true
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
-        destination_branch: gh-pages-main
+        path: '.'
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
 
     - name: Realiza as migrações
       env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL_MAIN }}
-        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_MAIN }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL_PRD }}
+        SUPABASE_USER: ${{ secrets.SUPABASE_USER_PRD }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_PRD }}
       run: |
-        psql $SUPABASE_URL -f migrations/migrate.sql
+        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f migrations/migrate.sql
