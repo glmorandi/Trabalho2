@@ -39,6 +39,7 @@ jobs:
     - name: Realiza as migrações
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL_DEV }}
+        SUPABASE_USER: ${{ secrets.SUPABASE_USER_DEV }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_DEV }}
       run: |
-        psql $SUPABASE_URL -f migrations/migrate.sql
+        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f migrations/migrate.sql
