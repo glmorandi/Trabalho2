@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Trigger rebuild netfly
       env:
         NETLIFY_URL: ${{ secrets.NETLIFY_URL }}
       run: |
@@ -34,4 +34,4 @@ jobs:
         SUPABASE_USER: ${{ secrets.SUPABASE_USER_DEV }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_DEV }}
       run: |
-        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f dev/migrations/migrate.sql
+        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f migrations/migrate.sql
