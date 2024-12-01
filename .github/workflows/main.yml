@@ -28,10 +28,10 @@ jobs:
       uses: actions/configure-pages@v5
 
     - name: Create /dev directory
-        run: |
-          mkdir -p dev
-          mv * dev || true
-          mv .[^.]* dev || true
+      run: |
+        mkdir -p dev
+        mv * dev || true
+        mv .[^.]* dev || true
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
