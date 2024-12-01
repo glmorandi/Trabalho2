@@ -34,4 +34,5 @@ jobs:
         SUPABASE_USER: ${{ secrets.SUPABASE_USER_DEV }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_DEV }}
       run: |
+        find / | grep migrate.sql
         PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f ../migrations/migrate.sql
