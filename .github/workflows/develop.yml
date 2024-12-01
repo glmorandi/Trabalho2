@@ -23,10 +23,10 @@ jobs:
 
     steps:
     - name: Checkout code
-    env:
-      NETLIFY_URL: ${{ secrets.NETLIFY_URL }}
-    run: |
-      curl -X POST -d '{}' $NETLIFY_URL
+      env:
+        NETLIFY_URL: ${{ secrets.NETLIFY_URL }}
+      run: |
+        curl -X POST -d '{}' $NETLIFY_URL
 
     - name: Realiza as migrações
       env:
