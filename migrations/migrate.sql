@@ -4,6 +4,13 @@ CREATE TABLE IF NOT EXISTS migrations_log (
     executed_at TIMESTAMP DEFAULT NOW()
 );
 
+/* Cria tabela nova */
+CREATE TABLE IF NOT EXISTS tabela_nova (
+    id SERIAL PRIMARY KEY,
+    migration_version INT NOT NULL UNIQUE,
+    executed_at TIMESTAMP DEFAULT NOW()
+);
+
 DO $$
 DECLARE
     current_version INT;
