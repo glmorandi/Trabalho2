@@ -1,0 +1,40 @@
+name: Realiza o deploy em DEV
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Trigger rebuild netfly
+      env:
+        NETLIFY_URL: ${{ secrets.NETLIFY_URL }}
+      run: |
+        curl -X POST -d '{}' $NETLIFY_URL
+
+    - name: Realiza as migrações
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL_DEV }}
+        SUPABASE_USER: ${{ secrets.SUPABASE_USER_DEV }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_DEV }}
+      run: |
+        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f migrations/migrate.sql

@@ -1,0 +1,45 @@
+name: Realiza o deploy na Main
+
+on:
+  schedule:
+    - cron: '0 21 * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: Realiza as migrações
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL_PRD }}
+        SUPABASE_USER: ${{ secrets.SUPABASE_USER_PRD }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY_PRD }}
+      run: |
+        PGPASSWORD=$SUPABASE_KEY psql -h $SUPABASE_URL -p 6543 -d postgres -U $SUPABASE_USER -f migrations/migrate.sql
